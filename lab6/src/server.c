@@ -72,11 +72,11 @@ int main(int argc, char **argv) {
       switch (option_index) {
       case 0:
         port = atoi(optarg);
-        // TODO: your code here
+        
         break;
       case 1:
         tnum = atoi(optarg);
-        // TODO: your code here
+       
         break;
       default:
         printf("Index %d is out of options\n", option_index);
@@ -163,14 +163,21 @@ int main(int argc, char **argv) {
 
       struct FactorialArgs args[tnum];
       uint32_t i = 0;
-      for (; i < tnum; i++) {
-        // TODO: parallel somehow
-        args[i].begin = begin + (end-begin+1)/tnum*i;
-
+      uint64_t k=end-begin;
+      for (i=0; i < tnum; i++) {
+       if(i==tnum-1){
+            args[i].begin=begin+i*(k/tnum);
+            args[i].end=end+1;
+        }
+        else{
+        args[i].begin=begin+i*(k/tnum);
+        args[i].end=begin+(i+1)*(k/tnum);
+        }
+//
+/*
+        args[i].begin = begin + (end-begin)/tnum*i+1;
         args[i].end = i==tnum - 1 ? end + 1: (begin + (end-begin +1)/tnum*(i+1));
-
-        args[i].end = begin + (end-begin+1)/tnum*(i+1);
-
+        args[i].end = begin + (end-begin+1)/tnum*(i+1);*/
         args[i].mod = mod;
 
 

@@ -30,19 +30,6 @@ struct ThreadArgs{
 int result = 1;
 pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
 
-// uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
-//   uint64_t result = 0;
-//   a = a % mod;
-//   while (b > 0) {
-//     if (b % 2 == 1)
-//       result = (result + a) % mod;
-//     a = (a * 2) % mod;
-//     b /= 2;
-//   }
-
-//   return result % mod;
-// }
-
 bool ConvertStringToUI64(const char *str, uint64_t *val) {
   char *end = NULL;
   unsigned long long i = strtoull(str, &end, 10);
@@ -218,14 +205,10 @@ int main(int argc, char **argv) {
    pthread_t threads[servers_num];
    struct ThreadArgs args[servers_num];
    i = 0;
-   for (; i<servers_num; i++){
+   for (; i < servers_num; ++i){
       args[i].server_args = *(to+i);
       args[i].begin = (k/servers_num)*i + 1;
-
-      args[i].end = (i == servers_num - 1 ? k : (k/servers_num)*(i+1));
-
-      args[i].end = (k/servers_num)*(i+1);
-
+      args[i].end = (i ==servers_num-1  ? k : (k/servers_num)*(i+1));
       args[i].mod = mod;
       if (pthread_create(&threads[i], NULL, (void *)ThreadServer, (void *)(args+i))) {
       printf("Error: pthread_create failed!\n");
@@ -234,7 +217,7 @@ int main(int argc, char **argv) {
    }
 
    i = 0;
-   for (; i < servers_num; i++) {
+   for (; i < servers_num; ++i) {
     pthread_join(threads[i], NULL);
   }
 
